@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'    // Your Maven installation in Jenkins
-        jdk 'JDK21'       // Your JDK installation in Jenkins
+        maven 'Maven3'    // make sure this matches your Jenkins Maven installation
+        jdk 'JDK21'       // make sure this matches your Jenkins JDK installation
     }
 
     stages {
@@ -27,8 +27,9 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {   // Must match your Jenkins SonarQube server name
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=number_guess_game -Dsonar.sources=src'
+                withSonarQubeEnv('SonarQube') {
+                    // Use a known working plugin version
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar -Dsonar.projectKey=number_guess_game -Dsonar.sources=src'
                 }
             }
         }
