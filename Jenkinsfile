@@ -27,8 +27,8 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {   // Name must match Jenkins SonarQube server
-                    sh 'sonar-scanner -Dsonar.projectKey=number_guess_game -Dsonar.sources=src'
+                withSonarQubeEnv('SonarQube') {   // Must match your Jenkins SonarQube server name
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=number_guess_game -Dsonar.sources=src'
                 }
             }
         }
@@ -37,7 +37,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
-            junit 'target/test-classes/**/*.xml'
+            junit 'target/surefire-reports/*.xml'
         }
     }
 }
