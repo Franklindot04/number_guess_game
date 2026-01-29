@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Replace this with your actual token
         SONAR_TOKEN = 'sqa_fdb1905a4661313553134316cccdc988e4a8b0db'
-        MAVEN_HOME = tool name: 'Maven 3.9.1', type: 'maven' // adjust Maven tool name in Jenkins
+        MAVEN_HOME = tool name: 'Maven 3.9.1', type: 'maven' // Make sure this matches your Jenkins Maven
     }
 
     stages {
@@ -50,8 +49,10 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
-            junit 'target/surefire-reports/*.xml'
+            steps {
+                archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
+                junit 'target/surefire-reports/*.xml'
+            }
         }
     }
 }
