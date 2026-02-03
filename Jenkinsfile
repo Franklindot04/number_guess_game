@@ -2,10 +2,13 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-token')
+        SONAR_TOKEN = credentials('sonar-token') // your SonarQube token stored in Jenkins credentials
+        NEXUS_USER = credentials('nexus-user')   // your Nexus username stored in Jenkins credentials
+        NEXUS_PASS = credentials('nexus-pass')   // your Nexus password stored in Jenkins credentials
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -39,17 +42,24 @@ pipeline {
             }
         }
 
+        stage('Deploy to Nexus') {
+            steps {
+                sh """
+                mvn deploy \
+                    -DskipTests \
+                    -DaltDeploymentRepository=releases::default::http://13.62.76.132:8081/nexus/content/repositories/releases/ \
+                    -Dnexus.username=${NEXUS_USER} \
+                    -Dnexus.password=${NEXUS_PASS}
+                """
+            }
+        }
+
         stage('Deploy to Tomcat') {
             steps {
                 sh """
-                # Only run if a WAR file exists
-                if [ -f target/NumberGuessGame-1.0.war ]; then
-                    curl --upload-file target/NumberGuessGame-1.0.war \
-                         --user tomcat-user:tomcat-password \
-                         http://13.60.183.176:8080/manager/text/deploy?path=/guess&update=true
-                else
-                    echo "No WAR file found, skipping deploy."
-                fi
+                curl -u tomcat-user:tomcat-password \
+                     -T target/NumberGuessGame-1.0.war \
+                     "http://13.60.183.176:8080/guess/manager/text/deploy?path=/guess&update=true"
                 """
             }
         }
@@ -57,11 +67,16 @@ pipeline {
 
     post {
         always {
-            // Wrap in a node to ensure workspace access
-            node {
+            steps {
                 archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
                 junit 'target/surefire-reports/*.xml'
             }
+        }
+        success {
+            echo 'Build, tests, analysis, and deployment completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed! Check the logs for details.'
         }
     }
 }
