@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-token') // your SonarQube token stored in Jenkins credentials
-        NEXUS_USER = credentials('nexus-user')   // your Nexus username stored in Jenkins credentials
-        NEXUS_PASS = credentials('nexus-pass')   // your Nexus password stored in Jenkins credentials
+        SONAR_TOKEN = credentials('sonar-token')
+        NEXUS_USER = credentials('nexus-user')
+        NEXUS_PASS = credentials('nexus-pass')
     }
 
     stages {
@@ -67,16 +67,14 @@ pipeline {
 
     post {
         always {
-            steps {
-                archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
-                junit 'target/surefire-reports/*.xml'
-            }
+            archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
+            junit 'target/surefire-reports/*.xml'
         }
         success {
-            echo 'Build, tests, analysis, and deployment completed successfully!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed! Check the logs for details.'
+            echo 'Pipeline failed. Check logs.'
         }
     }
 }
