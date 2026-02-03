@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="3" failures="0" name="com.studentapp.NumberGuessServletTest" time="0.595" errors="0" skipped="0">
+<testsuite tests="3" failures="0" name="com.studentapp.NumberGuessServletTest" time="0.597" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="17.0.17+10-LTS"/>
@@ -23,7 +23,6 @@
     <property name="os.name" value="Linux"/>
     <property name="classworlds.conf" value="/usr/share/maven/bin/m2.conf"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="sonar.login" value="sqa_fdb1905a4661313553134316cccdc988e4a8b0db"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="maven.conf" value="/usr/share/maven/conf"/>
     <property name="jdk.debug" value="release"/>
@@ -34,15 +33,13 @@
     <property name="library.jansi.path" value="/usr/share/maven/lib/jansi-native"/>
     <property name="user.home" value="/home/ec2-user"/>
     <property name="user.timezone" value="UTC"/>
-    <property name="sonar.host.url" value="http://localhost:9000"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="java.specification.version" value="17"/>
-    <property name="sonar.projectKey" value="number_guess_game"/>
     <property name="user.name" value="ec2-user"/>
     <property name="java.class.path" value="/usr/share/maven/boot/plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="17"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean verify sonar:sonar -Dsonar.projectKey=number_guess_game -Dsonar.projectName=number_guess_game -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqa_fdb1905a4661313553134316cccdc988e4a8b0db"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean deploy"/>
     <property name="java.home" value="/usr/lib/jvm/java-17-amazon-corretto.x86_64"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -60,9 +57,8 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="java.vendor.version" value="Corretto-17.0.17.10.1"/>
     <property name="sun.stdout.encoding" value="UTF-8"/>
-    <property name="sonar.projectName" value="number_guess_game"/>
   </properties>
-  <testcase classname="com.studentapp.NumberGuessServletTest" name="testCorrectGuess" time="0.584"/>
-  <testcase classname="com.studentapp.NumberGuessServletTest" name="testGuessTooLow" time="0.008"/>
-  <testcase classname="com.studentapp.NumberGuessServletTest" name="testGuessTooHigh" time="0.003"/>
+  <testcase classname="com.studentapp.NumberGuessServletTest" name="testCorrectGuess" time="0.587"/>
+  <testcase classname="com.studentapp.NumberGuessServletTest" name="testGuessTooLow" time="0.005"/>
+  <testcase classname="com.studentapp.NumberGuessServletTest" name="testGuessTooHigh" time="0.005"/>
 </testsuite>
