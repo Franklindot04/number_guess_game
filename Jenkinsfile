@@ -65,10 +65,12 @@ pipeline {
         }
     }
 
-        post {
+    post {
         always {
-            archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
-            junit 'target/surefire-reports/*.xml'
+            script {
+                archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
+                junit 'target/surefire-reports/*.xml'
+            }
         }
         success {
             echo 'Pipeline completed successfully!'
@@ -77,4 +79,5 @@ pipeline {
             echo 'Pipeline failed. Check logs.'
         }
     }
-}       
+}
+
