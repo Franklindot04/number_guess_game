@@ -81,27 +81,4 @@ pipeline {
                                 echo "❌ Deployment failed!"
                                 exit 1
                             fi
-                        '
-                    """
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
-        success {
-            echo 'CI/CD Pipeline completed successfully. Application deployed to Tomcat.'
-            echo "Access application at: http://13.60.183.176:8080/guess/"
-        }
-        failure {
-            echo 'Pipeline failed. Check Jenkins logs.'
-        }
-    }
-}
 
