@@ -48,7 +48,7 @@ pipeline {
 
         stage('Deploy to Nexus') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus-user', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'nexus-user', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
                     sh """
                         mvn deploy \
                           -DskipTests \
@@ -81,4 +81,24 @@ pipeline {
                                 echo "❌ Deployment failed!"
                                 exit 1
                             fi
+                        '
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI/CD Pipeline completed successfully. Application deployed to Tomcat.'
+            echo "Access application at: http://13.60.183.176:8080/guess/"
+        }
+        failure {
+            echo 'Pipeline failed. Check Jenkins logs.'
+        }
+        always {
+            echo 'Pipeline execution completed.'
+        }
+    }
+}
 
