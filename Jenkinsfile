@@ -66,16 +66,16 @@ pipeline {
     }
 
     post {
-        always {
+    always {
+        node {
             archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: true
             junit 'target/surefire-reports/*.xml'
         }
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed. Check logs.'
-        }
+    }
+    success {
+        echo 'Pipeline completed successfully!'
+    }
+    failure {
+        echo 'Pipeline failed. Check logs.'
     }
 }
-
