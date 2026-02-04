@@ -8,8 +8,6 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonar-token')
-        NEXUS_USER = credentials('nexus-user')
-        NEXUS_PASS = credentials('nexus-pass')
     }
 
     stages {
@@ -42,20 +40,6 @@ pipeline {
                               -Dsonar.login=$SONAR_TOKEN
                         """
                     }
-                }
-            }
-        }
-
-        stage('Deploy to Nexus') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus-user', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                    sh """
-                        mvn deploy \
-                          -DskipTests \
-                          -DaltDeploymentRepository=releases::default::http://13.62.76.132:8081/nexus/content/repositories/releases/ \
-                          -Dnexus.username=$NEXUS_USER \
-                          -Dnexus.password=$NEXUS_PASS
-                    """
                 }
             }
         }
