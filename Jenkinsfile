@@ -76,4 +76,8 @@ pipeline {
         }
         success {
             echo "CI/CD Pipeline completed successfully. Application deployed to Tomcat."
-            echo "Access application at: http://16.170"
+            echo "Access application at: http://16.170.35.114:8080/NumberGuessGame-1.0/"
+        }
+    }
+}
+
