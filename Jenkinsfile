@@ -51,7 +51,7 @@ pipeline {
                         mkdir -p /var/lib/jenkins/.ssh
                         ssh-keyscan -H 16.170.35.114
 
-                        scp target/NumberGuessGame-1.0.war ec2-user@16.170.35.114:/tmp/
+                        scp target/*.war ec2-user@16.170.35.114:/tmp/
 
                         ssh ec2-user@16.170.35.114 '
                             sudo cp /tmp/NumberGuessGame-1.0.war /opt/tomcat/webapps/
