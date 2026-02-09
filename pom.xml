@@ -77,13 +77,13 @@
         <repository>
             <id>releases</id>
             <name>Number Guess Game Repo</name>
-            <url>http://13.62.76.132:8081/nexus/content/repositories/releases/</url>
+            <url>http://13.62.76.34:8081/nexus/content/repositories/releases/</url>
         </repository>
 
         <snapshotRepository>
             <id>snapshots</id>
             <name>Number Guess Game Snapshot Repo</name>
-            <url>http://13.62.76.132:8081/nexus/content/repositories/snapshots/</url>
+            <url>http://13.62.76.34:8081/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
