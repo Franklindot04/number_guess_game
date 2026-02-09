@@ -41,7 +41,6 @@ public class NumberGuessServletTest {
 
     @Test
     public void testCorrectGuess() throws Exception {
-        int correctGuess = servlet.getTargetNumber();
         Mockito.when(request.getParameter("guess")).thenReturn(String.valueOf(correctGuess));
         servlet.doPost(request, response);
         assertTrue(responseWriter.toString().contains("Congratulations! You guessed the number!"));
