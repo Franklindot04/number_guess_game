@@ -11,48 +11,58 @@ import java.util.Random;
 public class NumberGuessServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private int targetNumber;
-
-    // Getter needed for your test
-    public int getTargetNumber() {
-        return targetNumber;
-    }
+    private int attempts;
 
     @Override
     public void init() throws ServletException {
         targetNumber = new Random().nextInt(100) + 1;
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<h1>Number Guessing Game</h1>");
-        out.println("<form action='guess' method='post'>");
-        out.println("Guess a number between 1 and 100: <input type='text' name='guess' />");
-        out.println("<input type='submit' value='Submit' />");
-        out.println("</form>");
+        attempts = 0;
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+
+        boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+        response.setCharacterEncoding("UTF-8");
+
         try {
             int guess = Integer.parseInt(request.getParameter("guess"));
+            attempts++;
+
+            String message;
+            String status;
+
             if (guess < targetNumber) {
-                out.println("<h2>Your guess is too low. Try again!</h2>");
+                message = "Your guess is too low!";
+                status = "low";
             } else if (guess > targetNumber) {
-                out.println("<h2>Your guess is too high. Try again!</h2>");
+                message = "Your guess is too high!";
+                status = "high";
             } else {
-                out.println("<h2>Congratulations! You guessed the number!</h2>");
-                targetNumber = new Random().nextInt(100) + 1; // Reset game
+                message = "🎉 Correct! You guessed the number!";
+                status = "correct";
+                targetNumber = new Random().nextInt(100) + 1;
+                attempts = 0;
             }
-        } catch (NumberFormatException e) {
-            out.println("<h2>Invalid input. Please enter a valid number.</h2>");
+
+            if (isAjax) {
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.write("{\"message\":\"" + message + "\",\"status\":\"" + status + "\",\"attempts\":" + attempts + "}");
+                out.flush();
+                return;
+            }
+
+        } catch (Exception e) {
+            if (isAjax) {
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.write("{\"message\":\"Invalid input. Enter a number.\",\"status\":\"error\",\"attempts\":" + attempts + "}");
+                out.flush();
+                return;
+            }
         }
-        out.println("<a href='guess'>Play Again</a>");
     }
 }
 
