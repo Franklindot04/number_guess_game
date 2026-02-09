@@ -45,7 +45,7 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                sshagent(['ec2-user']) {
+                sshagent(['tomcat-deploy-key']) {
                     sh '''
                         echo "Deploying WAR file to Tomcat server..."
                         mkdir -p /var/lib/jenkins/.ssh
