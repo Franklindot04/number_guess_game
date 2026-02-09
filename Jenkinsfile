@@ -6,6 +6,10 @@ pipeline {
         jdk 'JDK21'
     }
 
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
     stages {
 
         stage('Checkout') {
@@ -17,6 +21,19 @@ pipeline {
         stage('Build & Test') {
             steps {
                 sh 'mvn clean verify'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=NumberGuessGame \
+                          -Dsonar.host.url=http://13.53.42.115:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
+                    """
+                }
             }
         }
 
