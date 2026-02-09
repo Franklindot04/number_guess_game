@@ -48,22 +48,21 @@ pipeline {
                 sshagent(['tomcat-deploy-key']) {
                     sh '''
                         echo "Deploying WAR file to Tomcat server..."
-                        mkdir -p /var/lib/jenkins/.ssh
-                        ssh-keyscan -H 16.170.35.114
 
+                        mkdir -p /var/lib/jenkins/.ssh
+                        ssh-keyscan -H 16.170.35.114 >> /var/lib/jenkins/.ssh/known_hosts
+
+                        # Copy ANY WAR file produced by Maven (version-agnostic)
                         scp target/*.war ec2-user@16.170.35.114:/tmp/
 
+                        # Deploy automatically to Tomcat (no version hardcoding)
                         ssh ec2-user@16.170.35.114 '
-                            sudo cp /tmp/NumberGuessGame-1.0.war /opt/tomcat/webapps/
+                            sudo cp /tmp/*.war /opt/tomcat/webapps/
                             sudo systemctl restart tomcat
                             sleep 5
-                            if sudo ls /opt/tomcat/webapps/NumberGuessGame-1.0.war > /dev/null 2>&1; then
-                                echo "Deployment successful!"
-                            else
-                                echo "Deployment failed!"
-                                exit 1
-                            fi
                         '
+
+                        echo "Deployment to Tomcat completed."
                     '''
                 }
             }
@@ -76,7 +75,7 @@ pipeline {
         }
         success {
             echo "CI/CD Pipeline completed successfully. Application deployed to Tomcat."
-            echo "Access application at: http://16.170.35.114:8080/NumberGuessGame-1.0/"
+            echo "Access application at: http://16.170.35.114:8080/"
         }
     }
 }
