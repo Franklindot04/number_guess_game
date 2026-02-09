@@ -27,7 +27,7 @@ public class NumberGuessServletTest {
 
     @Test
     public void testGuessTooLow() throws Exception {
-        Mockito.when(request.getParameter("guess")).thenReturn("1");
+        Mockito.when(request.getParameter("guess")).thenReturn("0");
         servlet.doPost(request, response);
         assertTrue(responseWriter.toString().contains("Your guess is too low"));
     }
