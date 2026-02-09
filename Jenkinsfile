@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven3'
-        jdk 'JDK21'
+        maven 'Maven3'
+        jdk 'jdk21'
     }
 
     environment {
@@ -29,28 +29,27 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh """
                         mvn sonar:sonar \
-                          -Dsonar.projectKey=NumberGuessGame \
-                          -Dsonar.host.url=http://13.53.42.115:9000 \
-                          -Dsonar.login=$SONAR_TOKEN
+                        -Dsonar.projectKey=NumberGuessGame \
+                        -Dsonar.host.url=http://13.53.42.115:9000 \
+                        -Dsonar.login=${SONAR_TOKEN}
                     """
                 }
             }
         }
 
-        stage('Package') {
+        stage('Deploy to Nexus') {
             steps {
-                sh 'mvn package'
+                sh 'mvn clean deploy'
             }
         }
 
         stage('Deploy to Tomcat') {
             steps {
-                sshagent(['tomcat-deploy-key']) {
-                    sh """
+                sshagent(['ec2-user']) {
+                    sh '''
                         echo "Deploying WAR file to Tomcat server..."
-
-                        mkdir -p ~/.ssh
-                        ssh-keyscan -H 16.170.35.114 >> ~/.ssh/known_hosts 2>/dev/null
+                        mkdir -p /var/lib/jenkins/.ssh
+                        ssh-keyscan -H 16.170.35.114
 
                         scp target/NumberGuessGame-1.0.war ec2-user@16.170.35.114:/tmp/
 
@@ -65,23 +64,16 @@ pipeline {
                                 exit 1
                             fi
                         '
-                    """
+                    '''
                 }
             }
         }
     }
 
     post {
-        success {
-            echo 'CI/CD Pipeline completed successfully. Application deployed to Tomcat.'
-            echo "Access application at: http://16.170.35.114:8080/NumberGuessGame-1.0/"
-        }
-        failure {
-            echo 'Pipeline failed. Check Jenkins logs.'
-        }
         always {
-            echo 'Pipeline execution completed.'
+            echo "Pipeline execution completed."
         }
-    }
-}
-
+        success {
+            echo "CI/CD Pipeline completed successfully. Application deployed to Tomcat."
+            echo "Access application at: http://16.170
