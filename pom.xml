@@ -7,7 +7,7 @@
 
     <groupId>com.studentapp</groupId>
     <artifactId>NumberGuessGame</artifactId>
-    <version>1.2</version>
+    <version>2.0</version>
     <packaging>war</packaging>
 
     <name>Number Guessing Game</name>
