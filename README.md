@@ -1,4 +1,3 @@
-markdown
 # Number Guess Game – Original Source Version 🎯
 
 This branch contains the **original, unmodified version** of the Number Guess Game project exactly as it was provided at the start of the DevOps group assignment.  
